@@ -191,6 +191,15 @@ h2{margin:0 0 6px;font:800 clamp(36px,5.5vw,56px)/.92 var(--f-display);text-tran
 .cmp th:first-child,.cmp td:first-child{text-align:left}
 .cmp td{padding:8px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
 .cmp tfoot td{font-weight:700;border-bottom:0}
+.bit td:first-child{line-height:1.35}
+.bit td:first-child small{display:block;margin-top:2px;font-size:11.5px;font-weight:400;color:var(--ink-3)}
+.bit th:nth-child(2),.bit td:nth-child(2){text-align:center}
+.bit .bcat td{font-weight:700;background:var(--surface-2)}
+.bit .bcat td:first-child{font:600 11px/1.2 var(--f-mono);letter-spacing:.06em;text-transform:uppercase}
+.bfil{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.bfil button{font:600 13px/1 var(--f-body, inherit);padding:10px 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);cursor:pointer;min-height:40px}
+.bfil button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.bfil button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .exp{min-width:480px}
 .exp td small{display:block;color:var(--ink-3);font-size:12px;margin-top:2px;font-weight:400}
 .exp td:first-child{white-space:normal}
@@ -496,6 +505,22 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:2px}
       </table></div>
       <p class="note">Your target is $8,000. “Before bookings” is the estimate in the previous version of this page. “Booked” counts only what has a confirmation: the three flights, all six hotel stays, the Universal tickets and her insurance. Yosemite is the $233.25 deposit plus an estimated second night. Food, the rest of the activities and the car are still estimates. Insurance is a new line, so its “Before” is $0.</p>
     </div>
+
+    <div class="card" style="margin-top:28px" id="budItCard">
+      <h3>Line by line</h3>
+      <p class="note" style="margin:0 0 14px">Every number behind the totals above, grouped by category. <b>Paid</b> means the money is out, <b>Booked</b> is confirmed and still to pay, and <b>Estimate</b> is a guess. As an estimate turns into a booking or a receipt, its line moves up the list.</p>
+      <div class="budtiles" id="budItTiles"></div>
+      <div class="bfil" id="budItFilters" role="group" aria-label="Show lines">
+        <button type="button" data-f="all" aria-pressed="true">All</button>
+        <button type="button" data-f="paid" aria-pressed="false">Paid</button>
+        <button type="button" data-f="booked" aria-pressed="false">Booked</button>
+        <button type="button" data-f="est" aria-pressed="false">Estimates</button>
+      </div>
+      <div class="tablewrap"><table class="cmp bit">
+        <thead><tr><th>Line</th><th>Status</th><th>Amount</th></tr></thead>
+        <tbody id="budItRows"></tbody><tfoot id="budItFoot"></tfoot>
+      </table></div>
+    </div>
   </section>
 
   
@@ -604,6 +629,8 @@ const LIST = [["Chicago skating and skyline","Dec 16 sunset from 360 Chicago (ab
 const BUDGET = [["Lodging",3374,"13 nights, all booked. Yosemite 2 ($467: the $233.25 deposit plus an estimated second night at the same price), New York 5 ($1,951: one night at the Hampton Inn near JFK for $229 and four at EVEN Times Square South for $1,722), Chicago 1 ($106 at the Hilton Garden Inn), Los Angeles 3 ($502 at the Glendale Holiday Inn Express plus about $75 for parking) and San Diego 2 ($273 in National City). Everything except the Yosemite second night comes from your confirmation emails.","13 nights, all booked. Yosemite 2 ($467: the $233.25 deposit plus an estimated second night at the same price), New York 5 ($1,951: one night at the Hampton Inn near JFK for $229 and four at EVEN Times Square South for $1,722), Chicago 1 ($106 at the Hilton Garden Inn), Los Angeles 3 ($502 at the Glendale Holiday Inn Express plus about $75 for parking) and San Diego 2 ($273 in National City). Everything except the Yosemite second night comes from your confirmation emails.",false],["Activities",1879,"Five skyline decks (four in New York: One World, Top of the Rock, Summit, Edge; plus 360 Chicago), the Statue of Liberty ferry, the Vessel, Catalina, Universal Studios Hollywood ($278.78 for two, bought, plus about $35 for parking), skating, San Diego extras, park fees","Five skyline decks (four in New York: One World, Top of the Rock, Summit, Edge; plus 360 Chicago), the Statue of Liberty ferry, the Vessel, Catalina, Universal Studios Hollywood ($278.78 for two, bought, plus about $35 for parking), skating, San Diego extras, park fees",false],["Flights",1012,"Booked on American, Nov 4 to 6: SFO to JFK on Dec 11 ($366.80 for two), LaGuardia to O’Hare on Dec 16 ($296.80) and O’Hare to SFO on Dec 17 ($348.80). That is $1,012.40 for two, with the first checked bag free on each.","Booked on American, Nov 4 to 6: SFO to JFK on Dec 11 ($366.80 for two), LaGuardia to O’Hare on Dec 16 ($296.80) and O’Hare to SFO on Dec 17 ($348.80). That is $1,012.40 for two, with the first checked bag free on each.",false],["Food",1150,"Casual restaurant dinners in the Bay Area (about $35 to $60 for two) plus home meals. Four dinners are your picks.","Casual restaurant dinners in the Bay Area (about $35 to $60 for two) plus home meals. Four dinners are your picks.",false],["Car",370,"Charging and parking, plus about $150 for two rides to and from SFO (Uber’s page shows an average of $60 for UberX and $91 for XL)","Charging and parking, plus about $150 for two rides to and from SFO (Uber’s page shows an average of $60 for UberX and $91 for XL)",false],["Insurance",115,"Fauzia’s travel medical insurance, bought Nov 20: Dec 4 to Jan 2, $114.90. It covers up to $500,000 with a $100 deductible.","Fauzia’s travel medical insurance, bought Nov 20: Dec 4 to Jan 2, $114.90. It covers up to $500,000 with a $100 deductible.",false]];
 
 const EXPENSES = [];
+
+const BUDGET_ITEMS = {"Lodging":[["Yosemite Valley Lodge, Dec 8–10: deposit",233.25,"paid","Paid at booking",false,false],["Yosemite Valley Lodge: second night",233.25,"booked","Price estimated as the same as the deposit",false,false],["Hampton Inn NY-JFK, Dec 11",229.11,"paid","Prepaid, non-refundable",false,false],["EVEN Times Square South, Dec 12–16",1721.89,"booked","Pay at the hotel. Free to cancel until 6 p.m. Dec 9",false,false],["Hilton Garden Inn Chicago, Dec 16",106.12,"booked","Pay at the hotel",false,false],["Holiday Inn Express Glendale, Dec 20–23",502.38,"booked","First night due Nov 22, the rest at the hotel",false,false],["Glendale parking, 3 nights",75,"est","$25 a day, paid at the hotel",false,false],["Holiday Inn Express San Diego South, Dec 23–25",272.99,"booked","First night due Nov 22, the rest at the hotel",false,false]],"Activities":[["Universal Studios Hollywood, Dec 22: two tickets",278.78,"paid","$139.39 each",false,false],["Universal parking",35,"est","About $30 to $40",false,false],["Top of the Rock, Dec 13",84,"est","About $42 each",false,false],["Summit One Vanderbilt, Dec 14",88,"est","About $44 each",false,false],["Edge, Dec 12",72,"est","$34 Advance Saver plus $2, each",false,false],["360 Chicago, Dec 16",65,"est","About $30 each, with fees",false,false],["Statue of Liberty ferry, Dec 15",51,"est","About $25.50 each",false,false],["The Vessel, Dec 12",28,"est","From $14 each",false,false],["Everything else in activities",1177.22,"est","One World, Catalina Express, skating, San Diego extras and park fees. Not split up yet",false,true]],"Flights":[["AA 148, SFO to JFK, Dec 11",366.8,"paid","Two tickets, paid Nov 4",false,false],["AA 3164, LaGuardia to O’Hare, Dec 16",296.8,"paid","Two tickets, paid Nov 6",false,false],["AA 1253, O’Hare to SFO, Dec 17",348.8,"paid","Two tickets, paid Nov 6",false,false]],"Food":[["Meals out and groceries, all 30 days",1150,"est","One lump estimate, about $38 a day for two",false,false]],"Car":[["Two rides to and from SFO",150,"est","Uber average $60 for UberX, $91 for XL",false,false],["Charging and parking",220,"est","The rest of the car line",false,false]],"Insurance":[["Fauzia’s travel medical insurance",114.9,"paid","Paid Nov 20, Dec 4 to Jan 2",false,false]]};
 
 const BUDGET_TARGET = 8000;
 
@@ -1013,9 +1040,9 @@ function renderBudget(){
   let tot = 0;
   $('#bars').innerHTML = brows().map(b => {
     tot += b[1];
-    return `<div class="brow"><span class="bl">${b[0]}</span><div class="btrack"><div class="bfill" style="width:${(b[1] / max * 100).toFixed(1)}%"></div></div><span class="bamt">$${b[1].toLocaleString('en-US')}</span>${(state.share && b[3] ? b[3] : b[2]) ? `<p class="bnote">${state.share && b[3] ? b[3] : b[2]}</p>` : ''}</div>`;
+    return `<div class="brow"><span class="bl">${b[0]}</span><div class="btrack"><div class="bfill" style="width:${(b[1] / max * 100).toFixed(1)}%"></div></div><span class="bamt">$${Math.round(b[1]).toLocaleString('en-US')}</span>${(state.share && b[3] ? b[3] : b[2]) ? `<p class="bnote">${state.share && b[3] ? b[3] : b[2]}</p>` : ''}</div>`;
   }).join('');
-  $('#total').textContent = '$' + tot.toLocaleString('en-US');
+  $('#total').textContent = '$' + Math.round(tot).toLocaleString('en-US');
   renderBudgetCmp();
 }
 function renderBudgetCmp(){
@@ -1038,6 +1065,49 @@ function renderBudgetCmp(){
     return `<tr><td>${b[0]}</td><td>${usd(w)}</td><td>${usd(b[1])}</td><td>${chg(b[1] - w)}</td><td>${k ? usd(k) : '–'}</td></tr>`;
   }).join('');
   $('#budCmpFoot').innerHTML = `<tr><td>Total</td><td>${usd(was)}</td><td>${usd(tot)}</td><td>${chg(tot - was)}</td><td>${usd(booked)}</td></tr><tr><td colspan="3">Against the $8,000 target</td><td colspan="2">${d >= 0 ? usd(d) + ' over' : usd(-d) + ' under'}</td></tr>`;
+  renderBudgetItems();
+}
+let budFilter = 'all', budItWired = false;
+const f2 = n => '$' + n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+const BUD_ST = {paid:['ok','Paid'], booked:['check','Booked'], est:['skip','Estimate']};
+function budLines(name){
+  const rows = (BUDGET_ITEMS[name] || []).map(i => ({l:i[0], a:i[1], st:i[2], n:i[3] || '', sec:!!i[4], fold:!!i[5]}));
+  if(!state.share) return rows;
+  const hidden = rows.filter(r => r.sec).reduce((t, r) => t + r.a, 0);
+  const keep = rows.filter(r => !r.sec);
+  const f = keep.find(r => r.fold);
+  if(hidden && f) f.a = Math.round((f.a + hidden) * 100) / 100;
+  return keep;
+}
+function renderBudgetItems(){
+  const host = $('#budItRows'); if(!host) return;
+  const cats = brows().map(b => ({name:b[0], lines:budLines(b[0])})).filter(c => c.lines.length);
+  const sum = (arr, st) => arr.filter(r => !st || r.st === st).reduce((t, r) => t + r.a, 0);
+  const all = [].concat.apply([], cats.map(c => c.lines));
+  $('#budItTiles').innerHTML = [
+    ['Paid so far', f2(sum(all, 'paid')), 'money already out'],
+    ['Booked, to pay', f2(sum(all, 'booked')), 'confirmed, due later'],
+    ['Still estimated', f2(sum(all, 'est')), 'no booking yet'],
+    ['All lines', f2(sum(all)), all.length + ' lines']
+  ].map(x => `<div class="budtile"><small>${x[0]}</small><b>${x[1]}</b><span>${x[2]}</span></div>`).join('');
+  document.querySelectorAll('#budItFilters button').forEach(b => { const on = b.dataset.f === budFilter; b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+  let html = '', shown = 0, shownAmt = 0;
+  cats.forEach(c => {
+    const ls = c.lines.filter(r => budFilter === 'all' || r.st === budFilter);
+    if(!ls.length) return;
+    html += `<tr class="bcat"><td colspan="2">${c.name}</td><td>${f2(sum(ls))}</td></tr>`;
+    ls.forEach(r => {
+      const st = BUD_ST[r.st];
+      html += `<tr><td>${r.l}${r.n ? `<small>${r.n}</small>` : ''}</td><td><span class="st ${st[0]}">${st[1]}</span></td><td>${f2(r.a)}</td></tr>`;
+      shown++; shownAmt += r.a;
+    });
+  });
+  host.innerHTML = html || '<tr><td colspan="3" style="text-align:left">Nothing in this group.</td></tr>';
+  $('#budItFoot').innerHTML = `<tr><td colspan="2">${budFilter === 'all' ? 'Total' : 'Total of these ' + shown + ' lines'}</td><td>${f2(shownAmt)}</td></tr>`;
+  if(!budItWired){
+    budItWired = true;
+    $('#budItFilters').addEventListener('click', e => { const b = e.target.closest('button[data-f]'); if(!b) return; budFilter = b.dataset.f; renderBudgetItems(); });
+  }
 }
 const EXP_KEY = 'dec-atlas-exp-v1', EXP_CUSTOM_KEY = 'dec-atlas-exp-custom-v1', EXP_PAY_KEY = 'dec-atlas-exp-payer-v1', EXP_SETTLE_KEY = 'dec-atlas-exp-settle-v1';
 const EXP_DEFAULT = {'Flights':'s','Hotels':'s'};
