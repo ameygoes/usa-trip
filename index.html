@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Fauzia’s Trip Checklist</title>
+<meta name="description" content="Documents, medicines, packing and arrival steps for a first trip to the US.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0F766E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Trip list">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap">
+<style>
+/* One calm column. A sticky header with overall progress, then six tabs:
+   a bottom bar on phones (thumb reach), a pill row under the header on larger screens. */
+:root{
+  --bg:#F2F5FA; --surface:#FFFFFF; --ink:#14213D; --ink2:#44526F; --ink3:#5F6B84; --line:#D9E0EC;
+  --accent:#0F766E; --accent-ink:#FFFFFF; --accent-soft:#D7F0EC;
+  --must:#B45309; --must-soft:#FDEBD0;
+  --shadow:0 1px 2px rgba(20,33,61,.06),0 6px 18px rgba(20,33,61,.05);
+  --nav-h:66px;
+  --f-body:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --f-head:'Space Grotesk','Inter',system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0E1421; --surface:#161F32; --ink:#E9EEF8; --ink2:#B2BDD3; --ink3:#8E9BB5; --line:#28344D;
+    --accent:#2DD4BF; --accent-ink:#06201D; --accent-soft:#12383A;
+    --must:#F5B454; --must-soft:#3A2A10;
+    --shadow:0 1px 2px rgba(0,0,0,.3);
+    color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--f-body);
+  padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 24px)}
+.wrap{max-width:760px;margin:0 auto;
+  padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+
+/* Header + tabs */
+.chrome{position:sticky;top:0;z-index:30;background:var(--bg);padding-top:env(safe-area-inset-top,0px)}
+.top{display:flex;align-items:center;gap:12px;padding-block:10px}
+.logo{flex:none;width:36px;height:36px;border-radius:10px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center}
+.logo svg{width:22px;height:22px}
+.brand{min-width:0}
+.brand h1{font:700 18px/1.1 var(--f-head);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand p{margin:3px 0 0;font:600 10.5px/1.2 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.pct{margin-left:auto;text-align:right;font:700 20px/1 var(--f-head);font-variant-numeric:tabular-nums}
+.pct small{display:block;margin-top:3px;font:500 11px/1 var(--f-body);color:var(--ink3)}
+.track{height:4px;background:var(--line)}
+.fill{height:100%;width:0;background:var(--accent);transition:width .25s ease}
+
+.tabs{position:fixed;inset:auto 0 0 0;z-index:40;display:grid;grid-template-columns:repeat(6,1fr);
+  background:var(--surface);border-top:1px solid var(--line);
+  height:calc(var(--nav-h) + env(safe-area-inset-bottom,0px));
+  padding:0 env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
+.tab{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;
+  padding:6px 2px;color:var(--ink3);text-decoration:none;font:600 11px/1.1 var(--f-body);-webkit-tap-highlight-color:transparent}
+.tab svg{width:22px;height:22px;flex:none}
+.tab .lab-full{display:none}
+.tab .cnt{font:500 10px/1 var(--f-body);font-variant-numeric:tabular-nums;color:var(--ink3);min-height:10px}
+.tab.full .cnt{color:var(--accent);font-weight:700}
+.tab[aria-selected="true"]{color:var(--accent)}
+.tab[aria-selected="true"]::before{content:"";position:absolute;top:0;left:22%;right:22%;height:3px;border-radius:0 0 3px 3px;background:var(--accent)}
+
+@media (min-width:780px){
+  body{padding-bottom:64px}
+  .tabs{position:static;display:flex;gap:6px;overflow-x:auto;height:auto;background:none;border:0;padding:0 0 12px;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:1 1 auto;justify-content:center;flex-direction:row;gap:6px;padding:9px 10px;border:1px solid var(--line);border-radius:99px;background:var(--surface);font-size:14px;white-space:nowrap}
+  .tab:hover{border-color:var(--accent)}
+  .tab svg{width:18px;height:18px}
+  .tab .lab-short{display:none}
+  .tab .lab-full{display:inline}
+  .tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+  .tab[aria-selected="true"]::before{display:none}
+  .tab[aria-selected="true"] .cnt,.tab.full[aria-selected="true"] .cnt{color:var(--accent-ink);opacity:.9}
+  .chrome{border-bottom:1px solid var(--line)}
+  .track{display:none}
+}
+
+/* Panels */
+main{padding-top:20px}
+.panel[hidden]{display:none}
+.panel:focus{outline:none}
+.sh{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+h2{font:700 28px/1.1 var(--f-head);margin:0;text-wrap:balance}
+.count{font:600 13px/1 var(--f-body);color:var(--ink2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.sdesc{margin:8px 0 14px;color:var(--ink2);font-size:15px;max-width:62ch}
+h3{font:600 11px/1.2 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:22px 0 8px}
+.alldone{display:none;margin:0 0 14px;padding:12px 14px;border-radius:12px;background:var(--accent-soft);color:var(--ink);font-weight:500}
+.panel.complete .alldone{display:block}
+
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface);margin-bottom:6px}
+.seg button{font:600 13px/1 var(--f-body);color:var(--ink2);background:none;border:0;padding:10px 16px;cursor:pointer;min-height:40px}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+
+.list{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.item{display:flex;align-items:flex-start;border-top:1px solid var(--line)}
+.item:first-child{border-top:0}
+.item label{flex:1;min-width:0;display:flex;gap:14px;align-items:flex-start;padding:14px 16px;cursor:pointer;min-height:56px}
+.item input[type=checkbox]{flex:none;width:24px;height:24px;margin:1px 0 0;accent-color:var(--accent)}
+.txt{min-width:0;flex:1}
+.t{display:block;font-weight:500}
+.n{display:block;color:var(--ink2);font-size:13.5px;margin-top:2px}
+.must{display:inline-block;margin-left:8px;font:600 10.5px/1 var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--must);background:var(--must-soft);padding:4px 7px;border-radius:5px;vertical-align:2px}
+.where{display:inline-block;margin-top:6px;font:600 11px/1 var(--f-body);color:var(--ink3);letter-spacing:.04em;text-transform:uppercase}
+.item.done .t{color:var(--ink3);text-decoration:line-through;text-decoration-color:var(--ink3)}
+.item.done .n{opacity:.7}
+.todo-only .item.done,.todo-only .grp-done{display:none}
+.rm{flex:none;border:0;background:none;color:var(--ink3);font:inherit;font-size:22px;line-height:1;cursor:pointer;padding:14px 16px}
+
+.next{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:26px;padding:16px 18px;border-radius:14px;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:600}
+.next svg{width:20px;height:20px;flex:none}
+
+/* Home */
+.hero{display:flex;align-items:center;gap:18px;padding:18px;border-radius:16px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
+.ring{position:relative;flex:none;width:96px;height:96px}
+.ring svg{width:96px;height:96px;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:9}
+.ring .bg{stroke:var(--line)}
+.ring .fg{stroke:var(--accent);stroke-linecap:round;transition:stroke-dashoffset .35s ease}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font:700 22px/1 var(--f-head);font-variant-numeric:tabular-nums}
+.hero .k{margin:0;font:600 11px/1.2 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.hero h2{font-size:30px;margin:6px 0 4px}
+.hero p.sub{margin:0;color:var(--ink2);font-size:14.5px}
+.mustbar{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.card{display:block;padding:14px;border-radius:14px;background:var(--surface);border:1px solid var(--line);color:var(--ink);text-decoration:none;box-shadow:var(--shadow)}
+.card b{display:block;font:600 15px/1.2 var(--f-head)}
+.card span{display:block;margin-top:4px;color:var(--ink2);font-size:13px;font-variant-numeric:tabular-nums}
+.card .bar{height:5px;border-radius:9px;background:var(--line);margin-top:10px;overflow:hidden}
+.card .bar i{display:block;height:100%;width:0;background:var(--accent);border-radius:9px;transition:width .25s ease}
+details.how{margin-top:22px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 16px}
+details.how summary{cursor:pointer;font-weight:600;padding:12px 0}
+details.how p{margin:0 0 12px;color:var(--ink2);font-size:14.5px}
+.foot{margin-top:26px;font-size:13px;color:var(--ink2)}
+.foot p{margin:0 0 10px;max-width:64ch}
+.btn{font:600 13px/1 var(--f-body);color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:8px;padding:12px 14px;cursor:pointer;min-height:44px}
+.btn.solid{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+/* My items */
+.add{display:flex;gap:8px;margin-top:12px}
+.add input{flex:1;min-width:0;font:inherit;font-size:16px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+.empty{padding:16px;color:var(--ink3);font-size:14px}
+@media (prefers-reduced-motion: reduce){.fill,.ring .fg,.card .bar i{transition:none}}
+noscript p{padding:16px}
+</style>
+</head>
+<body>
+<noscript><p>This checklist needs JavaScript to run. Please turn it on in your browser.</p></noscript>
+
+<div class="chrome">
+  <div class="wrap">
+    <header class="top">
+      <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span>
+      <div class="brand"><h1>Fauzia’s trip checklist</h1><p>Dec 4 to Jan 2 · First trip to the US</p></div>
+      <div class="pct"><span id="topPct">0%</span><small id="topSub"></small></div>
+    </header>
+  </div>
+  <div class="track" aria-hidden="true"><div class="fill" id="topFill"></div></div>
+  <div class="wrap"><nav class="tabs" role="tablist" aria-label="Checklist sections" id="tabs"></nav></div>
+</div>
+
+<main class="wrap" id="panels"></main>
+
+<script>
+/* ---------- Data: [id, text, note, mustHave] ---------- */
+const SECTIONS = [
+ {id:'docs', name:'Documents', tab:'Documents', short:'Docs', desc:'Keep all of these in your cabin bag. Have each one on your phone and on paper.', groups:[
+  {name:'Travel papers', items:[
+   ['d1','Passport','Valid for at least 6 months after Jan 2, 2027. If your US visa is in an older passport, carry both.',1],
+   ['d2','US visitor visa (B-1/B-2)','Check the expiry date, the number of entries, and that your name matches your passport exactly.',1],
+   ['d3','Flight tickets, both ways','Your flight to the US on Dec 4 and your flight home on Jan 2. A PDF on your phone and a printout.',1],
+   ['d4','Travel insurance card and coverage letter','Keep the ID card and the Confirmation of Coverage letter on your phone and printed.',1],
+   ['d5','Invitation letter from Amey','Printed. It helps if the officer asks why you are visiting and where you will stay.',0],
+   ['d6','Trip itinerary and hotel bookings','Amey will send a PDF with every hotel and date. Print one copy.',0],
+   ['d7','The US address and phone number where you will stay','Written on paper. The customs form asks for it, and Amey will send it to you. Add Amey’s phone number too.',0],
+   ['d8','Proof that you will return to India','Only if the officer asks: a leave letter or a work or study letter, and recent bank statements.',0],
+   ['d9','Copies of everything','Photos of your passport, visa, insurance and tickets saved offline on your phone, emailed to yourself and to Amey, plus one paper set packed separately.',0],
+   ['d10','Connecting flight rules checked','If your route stops in a third country (the UK, Canada, Europe or the Gulf), ask the airline whether you need a transit visa.',0]
+  ]},
+  {name:'Money and phone', items:[
+   ['d11','Phone plan sorted','A roaming pack or an eSIM, so you can message Amey the moment you land. Airport Wi‑Fi is the backup.',0],
+   ['d12','Bank and cards ready','Tell your bank you are travelling and switch on international use for your cards.',0],
+   ['d13','A little US cash','In India you can buy up to $3,000 in cash per trip. Keep the rest on a forex or credit card. Small bills ($1 and $5) are handy for tips.',0],
+   ['d14','Flight details sent to Amey','Flight number, arrival time and terminal, so he can meet you.',0]
+  ]}
+ ]},
+ {id:'meds', name:'Medicines and health', tab:'Medicines', short:'Meds', desc:'Carry these in your cabin bag.', groups:[
+  {name:'Prescriptions', items:[
+   ['m1','Your regular prescription medicines','In the original packs with the pharmacy label. Bring enough for the whole 30 days plus a few spare. Your travel insurance does not cover pre-existing conditions, so do not count on buying more.',1],
+   ['m2','A prescription or doctor’s letter in English','The FDA advises keeping medicines in their original containers and carrying a prescription or note in English.',0],
+   ['m3','Controlled medicines checked','Strong painkillers, sleeping or anxiety tablets and codeine cough syrup follow stricter US rules. Ask your doctor or check before you pack them.',0]
+  ]},
+  {name:'Everyday medicine kit', items:[
+   ['m4','Paracetamol (acetaminophen)','For fever and pain.',0],
+   ['m5','Cold and flu: lozenges, decongestant, saline nasal spray','Cold air outside and dry heating inside.',0],
+   ['m6','ORS sachets and an anti-diarrhoeal','For new food and long travel days.',0],
+   ['m7','Antacid or digestion tablets','',0],
+   ['m8','Antihistamine','For allergies.',0],
+   ['m9','Motion sickness tablets','For mountain roads and boat rides.',0],
+   ['m10','Plasters, blister patches and antiseptic cream','You will walk a lot.',0],
+   ['m11','Lip balm, moisturiser and hand cream','December air is cold and dry.',0],
+   ['m12','Sunscreen and sunglasses','For southern California, and for snow glare.',0],
+   ['m13','Contact lenses and solution, or spare glasses','',0],
+   ['m14','Period products and personal hygiene items','Pack for the whole stay.',0],
+   ['m15','Hand sanitiser and a few masks','',0]
+  ]}
+ ]},
+ {id:'pack', name:'Packing', tab:'Packing', short:'Packing', desc:'It is cold in the mountains, New York and Chicago, and much milder in southern California. You can do laundry at Amey’s place, so pack for about 10 days, not 30.', groups:[
+  {name:'Clothes', items:[
+   ['p1','One warm winter coat or padded jacket','Ask Amey whether one is already here before you pack a second.',0],
+   ['p2','Thermal innerwear, 2 sets','',0],
+   ['p3','Sweaters or fleece layers, 3 or 4','Layers work better than one thick sweater.',0],
+   ['p4','Gloves, a beanie and a scarf','',0],
+   ['p5','Thick warm socks, 6 pairs','',0],
+   ['p6','Waterproof walking shoes or boots with good grip','For snow and wet streets in the mountains, New York and Chicago.',0],
+   ['p7','Comfortable everyday shoes','',0],
+   ['p8','Jeans or trousers, 4 or 5','',0],
+   ['p9','A few light tops for southern California','',0],
+   ['p10','One nicer outfit for dinners out','',0],
+   ['p11','Sleepwear and underwear for about 10 days','',0]
+  ]},
+  {name:'Electronics', items:[
+   ['p12','Phone, charger and cable','',0],
+   ['p13','Power bank','Cabin bag only, and 100 Wh (about 27,000 mAh) or less.',0],
+   ['p14','US plug adapter','US sockets are 120 V with flat two-pin plugs. Most phone and laptop chargers say 100–240V and need only an adapter. Check hair dryers and straighteners, which are often 230V only.',0],
+   ['p15','Earphones, camera, laptop or tablet','Only what you will really use.',0],
+   ['p16','Offline maps, films and music for the flights','',0]
+  ]},
+  {name:'Bags and small things', items:[
+   ['p17','Toiletries in 100 ml bottles, in a clear bag','For the cabin bag. Larger bottles go in checked luggage.',0],
+   ['p18','Hair and skin products you cannot do without','',0],
+   ['p19','Snacks','Packaged Indian snacks are fine. Declare all food on the customs form, and bring no fresh fruit, vegetables, meat or seeds.',0],
+   ['p20','Empty water bottle','Fill it after security.',0],
+   ['p21','A small day bag for sightseeing','',0],
+   ['p22','Luggage lock and name tags','A TSA-approved lock, with a tag inside and outside each bag. Take a photo of each bag.',0],
+   ['p23','Space left in the bag','For shopping on the way home.',0]
+  ]}
+ ]},
+ {id:'fly', name:'The day you fly', tab:'Fly day', short:'Fly day', desc:'Do these the day before and on the day.', groups:[
+  {name:'Before you leave for the airport', items:[
+   ['f1','Online check-in done, boarding pass saved on your phone','',0],
+   ['f2','Bags weighed against your airline’s limit','',0],
+   ['f3','Passport, visa, tickets, insurance and itinerary in your cabin bag','Check once more at the door.',1],
+   ['f4','Medicines in your cabin bag','',0],
+   ['f5','Phone, power bank and camera charged','',0],
+   ['f6','Message Amey when you board','',0]
+  ]},
+  {name:'When you land', items:[
+   ['a1','Fill in the US customs declaration (CBP Form 6059B)','On the plane or at the airport. Write the US address, and declare any food, plants and cash of $10,000 or more.',1],
+   ['a2','At the passport booth, have your passport and visa in hand','Officers take fingerprints and a photo. Answer briefly and truthfully: why you are visiting, how long, where you are staying and that you fly home on Jan 2.',1],
+   ['a3','Check your I-94 online','At i94.cbp.dhs.gov, to confirm the date you are admitted until.',0],
+   ['a4','Collect your bags and message Amey','',0]
+  ]}
+ ]}
+];
+
+/* ---------- Setup ---------- */
+const ICONS = {
+  home:'<path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/>',
+  docs:'<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h6M10 17h6"/>',
+  meds:'<path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z"/>',
+  pack:'<rect x="4" y="8" width="16" height="12" rx="2"/><path d="M9 8V5h6v3"/><path d="M4 13h16"/>',
+  fly:'<path d="M22 2 11 13"/><path d="M22 2l-7 20-4-9-9-4z"/>',
+  mine:'<path d="M12 5v14M5 12h14"/>'
+};
+const svg = (k, cls) => `<svg ${cls ? `class="${cls}" ` : ''}viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[k]}</svg>`;
+const ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const TABS = [{id:'home', tab:'Home', short:'Home'}].concat(SECTIONS.map(s => ({id:s.id, tab:s.tab, short:s.short})), [{id:'mine', tab:'My items', short:'Mine'}]);
+const IDS = TABS.map(t => t.id);
+const TITLE = 'Fauzia’s Trip Checklist';
+const START = new Date(2026, 11, 4), END = new Date(2027, 0, 2);
+
+const KEY = 'fauzia-checklist-v1', CKEY = 'fauzia-checklist-custom-v1', HKEY = 'fauzia-checklist-hide-v1';
+const $ = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+const load = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k) || 'null'); return v == null ? d : v; } catch(e) { return d; } };
+const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} };
+let ticks = load(KEY, {}), custom = load(CKEY, []), todoOnly = !!load(HKEY, false);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+const MUST = [];
+SECTIONS.forEach(s => s.groups.forEach(g => g.items.forEach(it => { if(it[3]) MUST.push({id:it[0], text:it[1], note:it[2], where:s.name}); })));
+
+/* ---------- Markup ---------- */
+function row(id, text, note, must, removable, where){
+  return `<li class="item" data-li="${id}"><label><input type="checkbox" data-id="${id}"><span class="txt"><span class="t">${esc(text)}${must ? '<span class="must">Must have</span>' : ''}</span>${note ? `<span class="n">${esc(note)}</span>` : ''}${where ? `<span class="where">${esc(where)}</span>` : ''}</span></label>${removable ? `<button class="rm" type="button" data-del="${id}" aria-label="Remove ${esc(text)}">×</button>` : ''}</li>`;
+}
+const filterBar = () => `<div class="seg" role="group" aria-label="Which items to show"><button type="button" data-filter="all">All</button><button type="button" data-filter="todo">Still to do</button></div>`;
+const panelOpen = (id, label) => `<section class="panel" id="p-${id}" data-id="${id}" role="tabpanel" aria-labelledby="t-${id}" tabindex="-1" hidden>`;
+
+function homePanel(){
+  const C = 2 * Math.PI * 40;
+  const cards = SECTIONS.concat([{id:'mine', name:'My items'}]).map(s =>
+    `<a class="card" href="#${s.id}"><b>${esc(s.name)}</b><span data-cnt="${s.id}"></span><div class="bar"><i data-bar="${s.id}"></i></div></a>`).join('');
+  return panelOpen('home') + `
+    <div class="hero">
+      <div class="ring" role="img" aria-label="Overall progress"><svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="40"/><circle class="fg" id="ringFg" cx="50" cy="50" r="40" stroke-dasharray="${C.toFixed(2)}" stroke-dashoffset="${C.toFixed(2)}"/></svg><b id="ringPct">0%</b></div>
+      <div><p class="k" id="cdK"></p><h2 id="cdBig"></h2><p class="sub" id="overallLine"></p></div>
+    </div>
+    <div class="mustbar"><h3>Do these first</h3><span class="count" id="mustLeft"></span></div>
+    <p class="alldone" id="mustOk" role="status">All the must-haves are ticked. The rest is easy.</p>
+    <ul class="list" id="mustList">${MUST.map(m => row(m.id, m.text, m.note, 0, false, m.where)).join('')}</ul>
+    <h3>Sections</h3>
+    <div class="cards">${cards}</div>
+    <a class="next" href="atlas/"><span>Open the trip plan (December Atlas)</span>${ARROW}</a>
+    <details class="how"><summary>Use it like an app, even offline</summary>
+      <p><b>iPhone (Safari):</b> tap the Share button, then “Add to Home Screen”.</p>
+      <p><b>Android (Chrome):</b> tap the ⋮ menu, then “Add to Home screen” or “Install app”.</p>
+      <p>After you open it once with internet, it also opens without internet, for example at the airport.</p>
+    </details>
+    <div class="foot">
+      <p>Your ticks are saved on this phone or computer only. Nobody else can see them.</p>
+      <p>Rules change, so check your airline, your doctor and the official pages before you fly: <a href="https://www.cbp.gov/travel/clearing-cbp/traveler-entry-form" target="_blank" rel="noopener">US customs declaration form</a>, <a href="https://www.fda.gov/ForConsumers/ConsumerUpdates/ucm484154.htm" target="_blank" rel="noopener">FDA advice on travelling with medicine</a> and <a href="https://www.rbi.org.in/scripts/faqview.aspx?id=66" target="_blank" rel="noopener">RBI foreign currency limits</a>.</p>
+      <p>Keep your passport, visa, tickets, insurance and medicines in your cabin bag, never in checked luggage.</p>
+      <button class="btn" id="clearAll" type="button">Clear all ticks</button>
+    </div>
+  </section>`;
+}
+function sectionPanel(s, i){
+  const nxt = i + 1 < SECTIONS.length ? {id:SECTIONS[i + 1].id, name:SECTIONS[i + 1].name} : {id:'mine', name:'My items'};
+  const body = s.groups.map(g => `<div class="grp"><h3>${esc(g.name)}</h3><ul class="list">${g.items.map(it => row(it[0], it[1], it[2], it[3], false)).join('')}</ul></div>`).join('');
+  return panelOpen(s.id) + `
+    <div class="sh"><h2>${esc(s.name)}</h2><span class="count" data-cnt="${s.id}"></span></div>
+    <p class="sdesc">${esc(s.desc)}</p>
+    ${filterBar()}
+    <p class="alldone" role="status">Everything here is ticked. Nice work.</p>
+    ${body}
+    <a class="next" href="#${nxt.id}"><span>Next: ${esc(nxt.name)}</span>${ARROW}</a>
+  </section>`;
+}
+function minePanel(){
+  return panelOpen('mine') + `
+    <div class="sh"><h2>My items</h2><span class="count" data-cnt="mine"></span></div>
+    <p class="sdesc">Add anything else you want to remember.</p>
+    ${filterBar()}
+    <div class="grp"><ul class="list" id="mineList"></ul></div>
+    <div class="add"><input id="newItem" type="text" placeholder="Add an item" aria-label="New checklist item" autocomplete="off" maxlength="140"><button class="btn solid" id="addBtn" type="button">Add</button></div>
+    <a class="next" href="#home"><span>Back to home</span>${ARROW}</a>
+  </section>`;
+}
+function renderMine(){
+  $('#mineList').innerHTML = custom.length ? custom.map(c => row(c.id, c.text, '', 0, true)).join('') : '<li class="empty">Nothing yet. Add your first item below.</li>';
+}
+
+/* ---------- Counts and in-place sync (no re-render on a tick, so focus stays put) ---------- */
+function stats(){
+  const per = {}; let n = 0, d = 0;
+  SECTIONS.forEach(s => { let sn = 0, sd = 0; s.groups.forEach(g => g.items.forEach(it => { sn++; if(ticks[it[0]]) sd++; })); per[s.id] = {n:sn, d:sd}; n += sn; d += sd; });
+  const cn = custom.length, cd = custom.filter(c => ticks[c.id]).length; per.mine = {n:cn, d:cd}; n += cn; d += cd;
+  return {per, n, d, pct: n ? Math.round(d / n * 100) : 0};
+}
+function sync(){
+  const S = stats();
+  $$('input[data-id]').forEach(i => { const on = !!ticks[i.dataset.id]; i.checked = on; i.closest('.item').classList.toggle('done', on); });
+  $$('.grp').forEach(g => g.classList.toggle('grp-done', $$('.item', g).length > 0 && $$('.item:not(.done)', g).length === 0));
+  $$('[data-cnt]').forEach(e => { const p = S.per[e.dataset.cnt]; e.textContent = p.d + ' of ' + p.n; });
+  $$('[data-bar]').forEach(e => { const p = S.per[e.dataset.bar]; e.style.width = (p.n ? p.d / p.n * 100 : 0) + '%'; });
+  $$('.tab').forEach(t => {
+    const id = t.dataset.id, cnt = $('.cnt', t); let txt = '', full = false;
+    if(id === 'home') txt = S.pct + '%';
+    else { const p = S.per[id]; if(p.n) { full = p.d === p.n; txt = full ? 'Done' : p.d + '/' + p.n; } }
+    cnt.textContent = txt; t.classList.toggle('full', full);
+  });
+  SECTIONS.concat([{id:'mine'}]).forEach(s => { const p = S.per[s.id], el = $('#p-' + s.id); if(el) el.classList.toggle('complete', p.n > 0 && p.d === p.n); });
+  const C = 2 * Math.PI * 40;
+  $('#ringFg').setAttribute('stroke-dashoffset', (C * (1 - S.pct / 100)).toFixed(2));
+  $('#ringPct').textContent = S.pct + '%';
+  $('#overallLine').textContent = S.d + ' of ' + S.n + ' done';
+  $('#topPct').textContent = S.pct + '%';
+  $('#topSub').textContent = S.d + ' of ' + S.n;
+  $('#topFill').style.width = S.pct + '%';
+  const left = MUST.filter(m => !ticks[m.id]).length;
+  $('#mustLeft').textContent = left ? left + ' of ' + MUST.length + ' left' : 'All done';
+  $('#mustOk').style.display = left ? 'none' : 'block';
+  document.body.classList.toggle('todo-only', todoOnly);
+  $$('[data-filter]').forEach(b => b.setAttribute('aria-pressed', String((b.dataset.filter === 'todo') === todoOnly)));
+}
+
+/* ---------- Countdown ---------- */
+function countdown(){
+  const t = new Date(); t.setHours(0, 0, 0, 0);
+  const days = Math.round((START - t) / 864e5), fmt = d => d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
+  let k = 'Trip starts ' + fmt(START), big;
+  if(days > 1) big = days + ' days to go';
+  else if(days === 1) big = 'Tomorrow';
+  else if(days === 0) big = 'Today is the day';
+  else if(t <= END) { big = 'Day ' + (Math.round((t - START) / 864e5) + 1) + ' of 30'; k = 'You are in the US'; }
+  else { big = 'Welcome home'; k = 'The trip is over'; }
+  $('#cdK').textContent = k; $('#cdBig').textContent = big;
+}
+
+/* ---------- Tabs and routing ---------- */
+function renderTabs(){
+  $('#tabs').innerHTML = TABS.map(t =>
+    `<a class="tab" role="tab" id="t-${t.id}" data-id="${t.id}" href="#${t.id}" aria-controls="p-${t.id}" aria-selected="false" tabindex="-1">${svg(t.id)}<span class="lab-short">${esc(t.short)}</span><span class="lab-full">${esc(t.tab)}</span><span class="cnt"></span></a>`).join('');
+}
+function show(id, user){
+  $$('.panel').forEach(p => { p.hidden = p.dataset.id !== id; });
+  $$('.tab').forEach(t => { const on = t.dataset.id === id; t.setAttribute('aria-selected', on ? 'true' : 'false'); t.tabIndex = on ? 0 : -1; if(on) t.scrollIntoView({block:'nearest', inline:'center'}); });
+  const tb = TABS.find(t => t.id === id);
+  document.title = (id === 'home' ? '' : tb.tab + ' · ') + TITLE;
+  if(user) window.scrollTo(0, 0);
+}
+let first = true;
+function route(){
+  let id = location.hash.slice(1); if(IDS.indexOf(id) < 0) id = 'home';
+  show(id, !first); first = false;
+}
+window.addEventListener('hashchange', route);
+
+/* ---------- Build ---------- */
+$('#panels').innerHTML = homePanel() + SECTIONS.map(sectionPanel).join('') + minePanel();
+renderTabs(); renderMine(); countdown(); sync(); route();
+
+$('#tabs').addEventListener('keydown', e => {
+  const k = e.key; if(['ArrowLeft', 'ArrowRight', 'Home', 'End'].indexOf(k) < 0) return;
+  e.preventDefault();
+  const cur = IDS.indexOf(document.activeElement.dataset.id); if(cur < 0) return;
+  const nxt = k === 'Home' ? 0 : k === 'End' ? IDS.length - 1 : (cur + (k === 'ArrowRight' ? 1 : -1) + IDS.length) % IDS.length;
+  location.hash = IDS[nxt]; setTimeout(() => $('#t-' + IDS[nxt]).focus(), 0);
+});
+document.addEventListener('change', e => {
+  const id = e.target.dataset && e.target.dataset.id; if(!id) return;
+  if(e.target.checked) ticks[id] = true; else delete ticks[id];
+  save(KEY, ticks); sync();
+});
+let armed = null;
+document.addEventListener('click', e => {
+  const t = e.target.closest('button, a'); if(!t) return;
+  if(t.dataset.del){ e.preventDefault(); const id = t.dataset.del; custom = custom.filter(c => c.id !== id); delete ticks[id]; save(CKEY, custom); save(KEY, ticks); renderMine(); sync(); return; }
+  if(t.dataset.filter){ todoOnly = t.dataset.filter === 'todo'; save(HKEY, todoOnly); sync(); return; }
+  if(t.id === 'addBtn') return addItem();
+  if(t.id === 'clearAll'){
+    if(!armed){ t.textContent = 'Tap again to clear'; armed = setTimeout(() => { armed = null; t.textContent = 'Clear all ticks'; }, 4000); return; }
+    clearTimeout(armed); armed = null; ticks = {}; save(KEY, ticks); t.textContent = 'Clear all ticks'; sync();
+  }
+});
+document.addEventListener('keydown', e => { if(e.target.id === 'newItem' && e.key === 'Enter'){ e.preventDefault(); addItem(); } });
+function addItem(){
+  const inp = $('#newItem'), v = inp.value.trim().slice(0, 140); if(!v) return;
+  custom.push({id:'u' + Date.now(), text:v}); save(CKEY, custom); inp.value = ''; renderMine(); sync(); inp.focus();
+}
+document.addEventListener('visibilitychange', () => { if(!document.hidden) countdown(); });
+
+if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+  window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
+}
+</script>
+</body>
+</html>
